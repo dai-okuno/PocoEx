@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepositoryRoot", "RepositoryRoot", "{5D4A78DD-F8C3-4652-AF5E-0EBA7DEE1052}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PocoEx.Analyzers", "PocoEx.Analyzers\PocoEx.Analyzers.csproj", "{70FE937D-1794-4C07-B7F0-55BBEFAB566B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PocoEx.Analyzers.Test", "PocoEx.Analyzers.Test\PocoEx.Analyzers.Test.csproj", "{A5C97DEC-53F1-49E4-A7F6-C8DC7C81C2CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PocoEx.Analyzers.Vsix", "PocoEx.Analyzers.Vsix\PocoEx.Analyzers.Vsix.csproj", "{3FEB8536-1C3F-4434-BD4E-8C4FFC0E3C99}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70FE937D-1794-4C07-B7F0-55BBEFAB566B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70FE937D-1794-4C07-B7F0-55BBEFAB566B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70FE937D-1794-4C07-B7F0-55BBEFAB566B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70FE937D-1794-4C07-B7F0-55BBEFAB566B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5C97DEC-53F1-49E4-A7F6-C8DC7C81C2CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5C97DEC-53F1-49E4-A7F6-C8DC7C81C2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5C97DEC-53F1-49E4-A7F6-C8DC7C81C2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5C97DEC-53F1-49E4-A7F6-C8DC7C81C2CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FEB8536-1C3F-4434-BD4E-8C4FFC0E3C99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FEB8536-1C3F-4434-BD4E-8C4FFC0E3C99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FEB8536-1C3F-4434-BD4E-8C4FFC0E3C99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FEB8536-1C3F-4434-BD4E-8C4FFC0E3C99}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
