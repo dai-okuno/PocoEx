@@ -1,0 +1,49 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".generated.cs" #>
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Threading.Tasks;
+
+namespace PocoEx
+{
+    partial class Utils
+    {
+<#	foreach (var entry in new [] {
+			new { Symbol = "INamedTypeSymbol", Syntax = "TypeDeclarationSyntax" },
+			new { Symbol = "IMethodSymbol", Syntax = "MethodDeclarationSyntax" },
+			new { Symbol = "IParameterSymbol", Syntax = "ParameterSyntax" },
+			new { Symbol = "IPropertySymbol", Syntax = "PropertyDeclarationSyntax" },
+			new { Symbol = "IEventSymbol", Syntax = "EventDeclarationSyntax" },
+		}) { #>
+
+        /// <summary>Gets the declaration syntaxes of <see cref="<#= entry.Symbol #>"/>.</summary>
+        /// <param name="symbol">The symbol to get declarations.</param>
+        public static Task<<#= entry.Syntax #>[]> GetDeclarationSyntaxAsync(this <#= entry.Symbol #> symbol)
+            => GetDeclarationSyntaxAsync<<#= entry.Syntax #>>(symbol);
+<#	} #>
+<#	foreach (var declaration in new [] {
+		"TypeDeclarationSyntax",
+		"MethodDeclarationSyntax",
+		"PropertyDeclarationSyntax",
+		"EventDeclarationSyntax",
+	}) { #>
+
+        /// <summary>Gets the location of <see cref="<#= declaration #>.Identifier"/>.</summary>
+        /// <param name="nodes">Nodes to get the location of the identifier.</param>
+        /// <returns>The locations of the identifier.</returns>
+        public static Location[] GetIdentifierLocations(this <#= declaration #>[] nodes)
+        {
+            var result = new Location[nodes.Length];
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                result[i] = nodes[i].Identifier.GetLocation();
+            }
+            return result;
+        }
+<#	} #>
+    }
+}

@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Threading;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
+using System.Reflection;
 
 namespace PocoEx
 {
@@ -15,13 +11,16 @@ namespace PocoEx
     {
         public const string DiagnosticId = "PocoEx";
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            Rules.PocoEx00001,
-            Rules.PocoEx00002);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
+            typeof(Rules).GetRuntimeFields()
+            .Where(f => f.IsStatic && f.FieldType == typeof(DiagnosticDescriptor))
+            .Select(f => f.GetValue(null) as DiagnosticDescriptor)
+            .ToImmutableArray();
 
         public override void Initialize(AnalysisContext context)
         {
             RethrowAnalyzer.RegisterTo(context);
+            EqualsObjectAnalyzer.RegisterTo(context);
         }
     }
 }

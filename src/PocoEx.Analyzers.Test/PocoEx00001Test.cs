@@ -31,7 +31,7 @@ try { }
 catch (Exception ex)
 {
     throw ex;
-}", ref line, ref column);
+}", ref line, ref column).ToString();
             var expected = new DiagnosticResult
             {
                 Id = Rules.PocoEx00001.Id,
@@ -42,8 +42,7 @@ catch (Exception ex)
                             new DiagnosticResultLocation("Test0.cs", line, column)
                         }
             };
-            var source = test.ToString();
-            VerifyCSharpDiagnostic(source, expected);
+            VerifyCSharpDiagnostic(test, expected);
 
             var fixtest = SourceFile.svm(@"
 try { }
@@ -51,7 +50,7 @@ catch (Exception ex)
 {
     throw;
 }");
-            VerifyCSharpFix(test.ToString(), fixtest.ToString(), allowNewCompilerDiagnostics: true);
+            VerifyCSharpFix(test, fixtest.ToString(), allowNewCompilerDiagnostics: true);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()

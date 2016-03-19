@@ -114,5 +114,140 @@ namespace PocoEx {
                 return ResourceManager.GetString("PocoEx00002Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   &apos;bool Equals(T)&apos; is declared, but &apos;bool Equals(object)&apos; is not overridden. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00101Description {
+            get {
+                return ResourceManager.GetString("PocoEx00101Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Override &apos;bool Equals(object)&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00101MessageFormat {
+            get {
+                return ResourceManager.GetString("PocoEx00101MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   &apos;bool Equals(object)&apos; is not overridden. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00101Title {
+            get {
+                return ResourceManager.GetString("PocoEx00101Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   A structure type should implement &apos;IEquatable&lt;T&gt;&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00102Description {
+            get {
+                return ResourceManager.GetString("PocoEx00102Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   &apos;{0}&apos; should implement &apos;IEquatable&lt;{0}&gt;&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00102MessageFormat {
+            get {
+                return ResourceManager.GetString("PocoEx00102MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   A structure type doesn&apos;t implement &apos;IEquatable&lt;T&gt;&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00102Title {
+            get {
+                return ResourceManager.GetString("PocoEx00102Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   &apos;bool Equals(object)&apos; should invoke all other &apos;bool Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00103Description {
+            get {
+                return ResourceManager.GetString("PocoEx00103Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Invoke all of &apos;bool Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00103MessageFormat {
+            get {
+                return ResourceManager.GetString("PocoEx00103MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   &apos;bool Equals(object)&apos; don&apos;t invoke some &apos;bool Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00103Title {
+            get {
+                return ResourceManager.GetString("PocoEx00103Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   A reference type object should be null-checked. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00104Description {
+            get {
+                return ResourceManager.GetString("PocoEx00104Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Invoke &apos;ReferenceEquals({0}, null)&apos; to null-check. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00104MessageFormat {
+            get {
+                return ResourceManager.GetString("PocoEx00104MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   The parameter is a reference type object, but is not null-checked. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00104Title {
+            get {
+                return ResourceManager.GetString("PocoEx00104Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Invoke &apos;bool ReferenceEquals(object, object)&apos; to check the parameter is same as the current object. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00105Description {
+            get {
+                return ResourceManager.GetString("PocoEx00105Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Invoke &apos;ReferenceEquals({0}, this)&apos; to check the parameter is same as the current object. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00105MessageFormat {
+            get {
+                return ResourceManager.GetString("PocoEx00105MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   &apos;ReferenceEquals(parameter, this)&apos; is not invoked. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00105Title {
+            get {
+                return ResourceManager.GetString("PocoEx00105Title", resourceCulture);
+            }
+        }
     }
 }
