@@ -23,6 +23,9 @@ namespace PocoEx.Collections
                 Enumerable = this
             };
         }
+        protected bool IsRemoved(T item)
+            => Comparer.Equals(item, Removing);
+
         new class Enumerator
             : DecorativeEnumerable<T>.Enumerator
         {
@@ -33,7 +36,7 @@ namespace PocoEx.Collections
             {
                 while (Original.MoveNext())
                 {
-                    if (Enumerable.Comparer.Equals(Original.Current, Enumerable.Removing)) continue;
+                    if (Enumerable.IsRemoved(Original.Current)) continue;
                     return true;
                 }
                 return false;

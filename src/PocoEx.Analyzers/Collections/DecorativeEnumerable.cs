@@ -40,9 +40,16 @@ namespace PocoEx.Collections
             object IEnumerator.Current
                 => Current;
 
-            public virtual void Dispose()
-                => Original.Dispose();
+            public void Dispose()
+                => Dispose(true);
 
+            protected virtual void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Original.Dispose();
+                }
+            }
             public abstract bool MoveNext();
 
             public virtual void Reset()

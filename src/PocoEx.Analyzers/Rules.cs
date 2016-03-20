@@ -7,24 +7,26 @@ namespace PocoEx
         private Rules()
         { }
 
+        /// <summary>Initialize '{0}' with the inner exception('{1}').</summary>
         public static readonly DiagnosticDescriptor PocoEx00001 = Usage(nameof(PocoEx00001));
 
+        /// <summary>Use 'throw;' to rethrow '{0}'.</summary>
         public static readonly DiagnosticDescriptor PocoEx00002 = Usage(nameof(PocoEx00002));
 
-        /// <summary>'bool Equals(T)' is declared, but 'bool Equals(object)' is not overridden.</summary>
+        /// <summary>'bool Equals(object)' should be overridden.</summary>
         public static readonly DiagnosticDescriptor PocoEx00101 = Design(nameof(PocoEx00101));
 
-        /// <summary>A structure type should implement 'IEquatable&lt;T&gt;'</summary>
+        /// <summary>'{0}' should implement 'IEquatable&lt;{0}&gt;'.</summary>
         public static readonly DiagnosticDescriptor PocoEx00102 = Design(nameof(PocoEx00102));
 
-        /// <summary>Invoke 'ReferenceEquals(parameter, null)' to null-check.</summary>
+        /// <summary>'bool Equals({0} {1})' should be invoked.</summary>
+        public static readonly DiagnosticDescriptor PocoEx00103 = Usage(nameof(PocoEx00103));
+
+        /// <summary>'ReferenceEquals({0}, null)' should be invoked to null-check.</summary>
         public static readonly DiagnosticDescriptor PocoEx00104 = Usage(nameof(PocoEx00104));
 
-        /// <summary>Invoke 'ReferenceEquals(parameter, this)' to check reference-equality.</summary>
+        /// <summary>'ReferenceEquals({0}, this)' should be invoked to check the parameter is same as the current object.</summary>
         public static readonly DiagnosticDescriptor PocoEx00105 = Usage(nameof(PocoEx00105));
-
-        /// <summary>Invoke all of 'bool Equals(T)'.</summary>
-        public static readonly DiagnosticDescriptor PocoEx00103 = Usage(nameof(PocoEx00103));
 
         /// <summary>Create a <see cref="DiagnosticDescriptor"/> belongs 'Design' category.</summary>
         /// <param name="id"></param>

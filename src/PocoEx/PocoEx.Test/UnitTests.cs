@@ -4,16 +4,17 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using TestHelper;
+using PocoEx;
 
-namespace PocoEx.Analyzers.Test
+namespace PocoEx.Test
 {
     [TestClass]
-    public class PocoEx00001Test : CodeFixVerifier
+    public class UnitTest : CodeFixVerifier
     {
 
         //No diagnostics expected to show up
         [TestMethod]
-        public void Empty()
+        public void TestMethod1()
         {
             var test = @"";
 
@@ -22,35 +23,50 @@ namespace PocoEx.Analyzers.Test
 
         //Diagnostic and CodeFix both triggered and checked for
         [TestMethod]
-        public void Fix_PocoEx00001()
+        public void TestMethod2()
         {
-            int line = 5;
-            int column = 5;
-            var test = SourceFile.svm(@"
-try { }
-catch (Exception ex)
-{
-    throw ex;
-}", ref line, ref column).ToString();
+            var test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {   
+        }
+    }";
             var expected = new DiagnosticResult
             {
-                Id = Rules.PocoEx00001.Id,
-                Message = string.Format(Resources.PocoEx00001MessageFormat, "ex"),
+                Id = "PocoEx",
+                Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                     new[] {
-                            new DiagnosticResultLocation("Test0.cs", line, column)
+                            new DiagnosticResultLocation("Test0.cs", 11, 15)
                         }
             };
+
             VerifyCSharpDiagnostic(test, expected);
 
-            var fixtest = SourceFile.svm(@"
-try { }
-catch (Exception ex)
-{
-    throw;
-}");
-            VerifyCSharpFix(test, fixtest.ToString(), allowNewCompilerDiagnostics: true);
+            var fixtest = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        class TYPENAME
+        {   
+        }
+    }";
+            VerifyCSharpFix(test, fixtest);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()

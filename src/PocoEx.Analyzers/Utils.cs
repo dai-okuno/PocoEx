@@ -84,30 +84,6 @@ namespace PocoEx
             => expression.IsKind(SyntaxKind.IdentifierName)
             && identifier.Text == ((IdentifierNameSyntax)expression).Identifier.Text;
 
-        public static void ReportDiagnostic<TSyntax>(this SymbolAnalysisContext context, DiagnosticDescriptor descriptor, TSyntax[] nodes, params object[] messageArgs)
-            where TSyntax : SyntaxNode
-        {
-            if (nodes.Length == 1)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, nodes[0].GetLocation(), messageArgs));
-            }
-            else if (1 < nodes.Length)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, nodes[0].GetLocation(), nodes.Skip(1).Select(node => node.GetLocation()), messageArgs));
-            }
-        }
-        public static void ReportDiagnostic(this SymbolAnalysisContext context, DiagnosticDescriptor descriptor, Location[] locations, params object[] messageArgs)
-        {
-            if (locations.Length == 1)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, locations[0], messageArgs));
-            }
-            else if (1 < locations.Length)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, locations[0], locations.Skip(1), messageArgs));
-            }
-        }
-
         public static TResult[] Convert<TSource, TResult>(this TSource[] source, Func<TSource, TResult> convert)
         {
             var result = new TResult[source.Length];
@@ -117,7 +93,45 @@ namespace PocoEx
             }
             return result;
         }
+        public static string Signature(this IMethodSymbol method)
+        {
+            return new StringBuilder().AppendSignature(method).ToString();
+        }
 
+        public static StringBuilder AppendSignature(this StringBuilder builder, IMethodSymbol method)
+        {
+            builder.Append(method.Name).Append('(');
+            var p = method.Parameters.GetEnumerator();
+            if (p.MoveNext())
+            {
+                builder.AppendSignature(p.Current);
+                while (p.MoveNext())
+                {
+                    builder.Append(", ").AppendSignature(p.Current);
+                }
+            }
+            builder.Append(')');
+            return builder;
+        }
+
+        private static StringBuilder AppendSignature(this StringBuilder builder, IParameterSymbol parameter)
+        {
+            switch (parameter.RefKind)
+            {
+                case RefKind.None:
+                    break;
+                case RefKind.Ref:
+                    builder.Append("ref ");
+                    break;
+                case RefKind.Out:
+                    builder.Append("out ");
+                    break;
+                default:
+                    break;
+            }
+            builder.Append(parameter.Type);
+            return builder;
+        }
     }
 
 }

@@ -116,7 +116,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   &apos;bool Equals(T)&apos; is declared, but &apos;bool Equals(object)&apos; is not overridden. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;Equals(T)&apos; is declared, but &apos;Equals(object)&apos; is not overridden. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00101Description {
             get {
@@ -125,7 +125,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   Override &apos;bool Equals(object)&apos;. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;Equals(object)&apos; should be overridden. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00101MessageFormat {
             get {
@@ -134,7 +134,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   &apos;bool Equals(object)&apos; is not overridden. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;Equals(object)&apos; is not overridden. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00101Title {
             get {
@@ -170,7 +170,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   &apos;bool Equals(object)&apos; should invoke all other &apos;bool Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;Equals(object)&apos; should invoke all other &apos;Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00103Description {
             get {
@@ -179,7 +179,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   Invoke all of &apos;bool Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;Equals(object)&apos; should invoke {0}. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00103MessageFormat {
             get {
@@ -188,7 +188,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   &apos;bool Equals(object)&apos; don&apos;t invoke some &apos;bool Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;Equals(object)&apos; don&apos;t invoke some &apos;Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00103Title {
             get {
@@ -206,7 +206,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   Invoke &apos;ReferenceEquals({0}, null)&apos; to null-check. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;ReferenceEquals({0}, null)&apos; should be invoked to null-check. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00104MessageFormat {
             get {
@@ -224,7 +224,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   Invoke &apos;bool ReferenceEquals(object, object)&apos; to check the parameter is same as the current object. に類似しているローカライズされた文字列を検索します。
+        ///   Invoke &apos;ReferenceEquals(object, object)&apos; to check the parameter is same as the current object. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00105Description {
             get {
@@ -233,7 +233,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   Invoke &apos;ReferenceEquals({0}, this)&apos; to check the parameter is same as the current object. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;ReferenceEquals({0}, this)&apos; should be invoked to check the parameter is same as the current object. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00105MessageFormat {
             get {
