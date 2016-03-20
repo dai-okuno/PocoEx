@@ -75,8 +75,8 @@ namespace PocoEx
 
         }
     }
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RethrowCodeFix)), Shared]
-    public class RethrowCodeFix
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PocoEx00001CodeFix)), Shared]
+    public class PocoEx00001CodeFix
         : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; }

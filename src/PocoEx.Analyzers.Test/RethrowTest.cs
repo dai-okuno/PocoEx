@@ -55,7 +55,7 @@ catch (Exception ex)
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new RethrowCodeFix();
+            return new PocoEx00001CodeFix();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
