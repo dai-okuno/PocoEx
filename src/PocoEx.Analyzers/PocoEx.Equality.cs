@@ -1,17 +1,14 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Reflection;
-using System;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using PocoEx.Linq;
-using System.Threading.Tasks;
-using System.Text;
-using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
 
 namespace PocoEx
 {
@@ -215,9 +212,7 @@ namespace PocoEx
             protected INamedTypeSymbol SuppressMessageAttributeSymbol { get; private set; }
 
             protected IMethodSymbol Target { get; private set; }
-
-            protected Task<IEnumerable<MethodDeclarationSyntax>> TargetDeclarations { get; private set; }
-
+            
             private IEnumerable<ISymbol> Untouched;
 
             public void Analyze(CodeBlockAnalysisContext context)
@@ -240,7 +235,7 @@ namespace PocoEx
                         case SymbolKind.Property:
                             var property = (IPropertySymbol)symbol.Symbol;
                             if (property.GetMethod != null && property.GetMethod.DeclaredAccessibility == Accessibility.Public)
-                            {
+                            {   // getter is public
                                 Untouched = Untouched.Remove(property);
                             }
                             break;
@@ -258,7 +253,6 @@ namespace PocoEx
 
             protected virtual void Analyzed(CodeBlockAnalysisContext context)
             {
-                TargetDeclarations.Wait();
                 foreach (var untouched in Untouched)
                 {
                     if (SuppressedMemberNames.Contains(untouched.Name)) continue;
@@ -273,7 +267,6 @@ namespace PocoEx
             protected virtual void Analyzing(CodeBlockAnalysisContext context)
             {
                 Target = (IMethodSymbol)context.OwningSymbol;
-                TargetDeclarations = Target.GetDeclarationSyntaxAsync(context.CancellationToken);
                 SemanticModel = context.SemanticModel;
                 SuppressMessageAttributeSymbol = SemanticModel.Compilation.GetTypeByMetadataName(typeof(SuppressMessageAttribute).FullName);
                 SuppressedMemberNames = new HashSet<string>(
@@ -290,44 +283,6 @@ namespace PocoEx
 
                 Untouched = Target.Parameters[0].Type.GetMembers()
                     .Where(IsEqualityElement);
-            }
-
-            private bool CanReadFromDerived(IFieldSymbol symbol)
-            {
-                switch (symbol.DeclaredAccessibility)
-                {
-                    case Accessibility.NotApplicable:
-                    case Accessibility.Private:
-                        return false;
-                    case Accessibility.ProtectedAndInternal:
-                    case Accessibility.Internal:
-                        return symbol.ContainingAssembly.Equals(Target.ContainingAssembly);
-                    case Accessibility.Protected:
-                    case Accessibility.ProtectedOrInternal:
-                    case Accessibility.Public:
-                        return true;
-                    default:
-                        throw new Exception(string.Format("Unexpected {0}: {1}.", typeof(Accessibility), symbol.DeclaredAccessibility));
-                }
-            }
-
-            private bool CanReadFromDerived(IPropertySymbol symbol)
-            {
-                switch (symbol.DeclaredAccessibility)
-                {
-                    case Accessibility.NotApplicable:
-                    case Accessibility.Private:
-                        return false;
-                    case Accessibility.ProtectedAndInternal:
-                    case Accessibility.Internal:
-                        return symbol.ContainingAssembly.Equals(Target.ContainingAssembly) && symbol.GetMethod.DeclaredAccessibility != Accessibility.Private;
-                    case Accessibility.Protected:
-                    case Accessibility.ProtectedOrInternal:
-                    case Accessibility.Public:
-                        return symbol.GetMethod.DeclaredAccessibility != Accessibility.Private;
-                    default:
-                        throw new Exception(string.Format("Unexpected {0}: {1}.", typeof(Accessibility), symbol.DeclaredAccessibility));
-                }
             }
 
         }

@@ -20,6 +20,7 @@ namespace PocoEx.Analyzers.Test
             var test = "";
             VerifyCSharpDiagnostic(test);
         }
+
         #region PocoEx00101
 
         [TestMethod]
@@ -150,7 +151,7 @@ namespace PocoEx
 {
     class Class1
     {
-        public T Value { get; private set; }
+        public int Value { get; private set; }
     }
 }";
             VerifyCSharpDiagnostic(test);
@@ -165,7 +166,7 @@ namespace PocoEx
 {
     class Class1: IEquatable<Class1>, IEquatable<int>
     {
-        public T Value { get; private set; }
+        public int Value { get; private set; }
 
         public override bool Equals(object obj)
             => Equals(obj as Class1)
@@ -178,6 +179,9 @@ namespace PocoEx
                 );
         public bool Equals(int other)
             => Value == other;
+
+        public override int GetHashCode()
+            => Value;
     }
 }";
             VerifyCSharpDiagnostic(test);
@@ -187,7 +191,7 @@ namespace PocoEx
         public void PocoEx00103_Fix_ReferenceType()
         {
             int line = 9;
-            int column = 9;
+            int column = 30;
             var test = @"
 using System;
 namespace PocoEx
@@ -206,6 +210,9 @@ namespace PocoEx
                 );
         public bool Equals(int other)
             => Value == other;
+
+        public override int GetHashCode()
+            => Value;
     }
 }";
             var expected = new DiagnosticResult
@@ -225,7 +232,7 @@ namespace PocoEx
         public void PocoEx00103_Fix_ValueType()
         {
             int line = 9;
-            int column = 9;
+            int column = 30;
             var test = @"
 using System;
 namespace PocoEx
@@ -244,6 +251,9 @@ namespace PocoEx
                 );
         public bool Equals(int other)
             => Value == other;
+
+        public override int GetHashCode()
+            => Value;
     }
 }";
             var expected = new DiagnosticResult
@@ -263,7 +273,7 @@ namespace PocoEx
         public void PocoEx00103_Fix_Multi()
         {
             int line = 9;
-            int column = 9;
+            int column = 30;
             var test = @"
 using System;
 namespace PocoEx
@@ -280,8 +290,13 @@ namespace PocoEx
                 && (ReferenceEquals(other, this)
                     || (Value == other.Value)
                 );
+
         public bool Equals(int other)
             => Value == other;
+
+        public override int GetHashCode()
+            => Value;
+
     }
 }";
             var expected1 = new DiagnosticResult
@@ -295,6 +310,256 @@ namespace PocoEx
                 }
             };
             VerifyCSharpDiagnostic(test, expected1);
+        }
+
+        #endregion
+
+        #region PocoEx00104
+
+        [TestMethod]
+        public void PocoEx00104_Analyze()
+        {
+            int line = 9;
+            int column = 21;
+            var test = @"
+using System;
+namespace PocoEx
+{
+    class Class1: IEquatable<Class1>
+    {
+        public int Value { get; private set; }
+
+        public bool Equals(Class1 other)
+            => (ReferenceEquals(other, this)
+                || (Value == other.Value)
+            );
+
+        public override bool Equals(object obj)
+            => Equals(obj as Class1);
+
+        public override int GetHashCode()
+            => Value;
+    }
+}";
+            var expected = new DiagnosticResult
+            {
+                Id = Rules.PocoEx00104.Id,
+                Message = string.Format(Resources.PocoEx00104MessageFormat, "other"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                new[] {
+                    new DiagnosticResultLocation("Test0.cs", line, column)
+                }
+            };
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+        #endregion
+
+        #region PocoEx00105
+
+        [TestMethod]
+        public void PocoEx00105_Analyze()
+        {
+            int line = 9;
+            int column = 21;
+            var test = @"
+using System;
+namespace PocoEx
+{
+    class Class1: IEquatable<Class1>
+    {
+        public int Value { get; private set; }
+
+        public bool Equals(Class1 other)
+            => !ReferenceEquals(other, null)
+                && (Value == other.Value);
+
+        public override bool Equals(object obj)
+            => Equals(obj as Class1);
+
+        public override int GetHashCode()
+            => Value;
+    }
+}";
+            var expected = new DiagnosticResult
+            {
+                Id = Rules.PocoEx00105.Id,
+                Message = string.Format(Resources.PocoEx00105MessageFormat, "other"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                new[] {
+                    new DiagnosticResultLocation("Test0.cs", line, column)
+                }
+            };
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+        #endregion
+
+        #region PocoEx00106
+
+        [TestMethod]
+        public void PocoEx00106_Fix_1_Property()
+        {
+            int line = 9;
+            int column = 21;
+            var test = @"
+using System;
+namespace PocoEx
+{
+    class Class1: IEquatable<Class1>
+    {
+        public int Value { get; private set; }
+
+        public bool Equals(Class1 other)
+            => ReferenceEquals(other, this)
+                || (!ReferenceEquals(other, null)
+                );
+
+        public override bool Equals(object obj)
+            => Equals(obj as Class1);
+
+        public override int GetHashCode()
+            => Value;
+    }
+";
+            var expected = new DiagnosticResult
+            {
+                Id = Rules.PocoEx00106.Id,
+                Message = string.Format(Resources.PocoEx00106MessageFormat, "PocoEx.Class1", "Value"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                new[] {
+                    new DiagnosticResultLocation("Test0.cs", 7, 20),
+                    new DiagnosticResultLocation("Test0.cs", line, column),
+                }
+            };
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void PocoEx00106_Fix_2_Properties()
+        {
+            int line = 11;
+            int column = 21;
+            var test = @"
+using System;
+namespace PocoEx
+{
+    class Class1: IEquatable<Class1>
+    {
+        public int Id { get; private set; }
+
+        public int Value { get; private set; }
+
+        public bool Equals(Class1 other)
+            => ReferenceEquals(other, this)
+                || (!ReferenceEquals(other, null)
+                );
+
+        public override bool Equals(object obj)
+            => Equals(obj as Class1);
+
+        public override int GetHashCode()
+            => Value;
+    }
+";
+            var expected1 = new DiagnosticResult
+            {
+                Id = Rules.PocoEx00106.Id,
+                Message = string.Format(Resources.PocoEx00106MessageFormat, "PocoEx.Class1", "Id"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                new[] {
+                    new DiagnosticResultLocation("Test0.cs", 7, 20),
+                    new DiagnosticResultLocation("Test0.cs", line, column),
+                }
+            };
+            var expected2 = new DiagnosticResult
+            {
+                Id = Rules.PocoEx00106.Id,
+                Message = string.Format(Resources.PocoEx00106MessageFormat, "PocoEx.Class1", "Value"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                new[] {
+                    new DiagnosticResultLocation("Test0.cs", 9, 20),
+                    new DiagnosticResultLocation("Test0.cs", line, column),
+                }
+            }; VerifyCSharpDiagnostic(test, expected1, expected2);
+        }
+
+        [TestMethod]
+        public void PocoEx00106_Fix_1_of_2_Properties()
+        {
+            int line = 11;
+            int column = 21;
+            var test = @"
+using System;
+namespace PocoEx
+{
+    class Class1: IEquatable<Class1>
+    {
+        public int Id { get; private set; }
+
+        public int Value { get; private set; }
+
+        public bool Equals(Class1 other)
+            => ReferenceEquals(other, this)
+                || (!ReferenceEquals(other, null)
+                    && Value == other.Value
+                );
+
+        public override bool Equals(object obj)
+            => Equals(obj as Class1);
+
+        public override int GetHashCode()
+            => Value;
+    }
+";
+            var expected = new DiagnosticResult
+            {
+                Id = Rules.PocoEx00106.Id,
+                Message = string.Format(Resources.PocoEx00106MessageFormat, "PocoEx.Class1", "Id"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                new[] {
+                    new DiagnosticResultLocation("Test0.cs", 7, 20),
+                    new DiagnosticResultLocation("Test0.cs", line, column),
+                }
+            };
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void PocoEx00106_Analyze_Suppress_1_of_2_Properties()
+        {
+            var test = @"
+using System;
+using System.Diagnostics.CodeAnalysis;
+namespace PocoEx
+{
+    class Class1: IEquatable<Class1>
+    {
+        public int Id { get; private set; }
+
+        public int Value { get; private set; }
+
+        [SuppressMessage(""Usage"", ""PocoEx00106"", MessageId = ""Value"")]
+        public bool Equals(Class1 other)
+            => ReferenceEquals(other, this)
+                || (!ReferenceEquals(other, null)
+                    && Id == other.Id
+                );
+
+        public override bool Equals(object obj)
+            => Equals(obj as Class1);
+
+        public override int GetHashCode()
+            => Value;
+    }
+";
+            VerifyCSharpDiagnostic(test);
         }
 
         #endregion

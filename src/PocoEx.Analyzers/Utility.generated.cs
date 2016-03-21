@@ -64,6 +64,15 @@ namespace PocoEx
         /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
         /// <param name="context">Context to report a diagnostic.</param>
         /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="node">A syntax node related with the diagnostic.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic<TSyntax>(this SymbolAnalysisContext context, DiagnosticDescriptor descriptor, TSyntax node, params object[] messageArgs)
+            where TSyntax : SyntaxNode
+			=> context.ReportDiagnostic(Diagnostic.Create(descriptor, node.GetLocation(), messageArgs));
+
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
         /// <param name="nodes">Syntax nodes related with the diagnostic.</param>
         /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
         public static void ReportDiagnostic<TSyntax>(this SymbolAnalysisContext context, DiagnosticDescriptor descriptor, IEnumerable<TSyntax> nodes, params object[] messageArgs)
@@ -84,6 +93,24 @@ namespace PocoEx
         /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
         /// <param name="context">Context to report a diagnostic.</param>
         /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="locations">An optional primary location of the diagnostic. If null, <see cref="Location"/> will return <see cref="Location.None"/>.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic(this SymbolAnalysisContext context, DiagnosticDescriptor descriptor, ImmutableArray<Location> locations, params object[] messageArgs)
+        {
+            context.ReportDiagnostic(Diagnostic.Create(descriptor, locations[0], locations.Skip(1), messageArgs));
+        }
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="node">A syntax node related with the diagnostic.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic<TSyntax>(this CodeBlockAnalysisContext context, DiagnosticDescriptor descriptor, TSyntax node, params object[] messageArgs)
+            where TSyntax : SyntaxNode
+			=> context.ReportDiagnostic(Diagnostic.Create(descriptor, node.GetLocation(), messageArgs));
+
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
         /// <param name="nodes">Syntax nodes related with the diagnostic.</param>
         /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
         public static void ReportDiagnostic<TSyntax>(this CodeBlockAnalysisContext context, DiagnosticDescriptor descriptor, IEnumerable<TSyntax> nodes, params object[] messageArgs)
@@ -100,5 +127,52 @@ namespace PocoEx
 			var location = locations.FirstOrDefault() ?? Location.None;
             context.ReportDiagnostic(Diagnostic.Create(descriptor, location, locations.Skip(1), messageArgs));
         }
-    }
+
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="locations">An optional primary location of the diagnostic. If null, <see cref="Location"/> will return <see cref="Location.None"/>.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic(this CodeBlockAnalysisContext context, DiagnosticDescriptor descriptor, ImmutableArray<Location> locations, params object[] messageArgs)
+        {
+            context.ReportDiagnostic(Diagnostic.Create(descriptor, locations[0], locations.Skip(1), messageArgs));
+        }
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="node">A syntax node related with the diagnostic.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic<TSyntax>(this SyntaxNodeAnalysisContext context, DiagnosticDescriptor descriptor, TSyntax node, params object[] messageArgs)
+            where TSyntax : SyntaxNode
+			=> context.ReportDiagnostic(Diagnostic.Create(descriptor, node.GetLocation(), messageArgs));
+
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="nodes">Syntax nodes related with the diagnostic.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic<TSyntax>(this SyntaxNodeAnalysisContext context, DiagnosticDescriptor descriptor, IEnumerable<TSyntax> nodes, params object[] messageArgs)
+            where TSyntax : SyntaxNode
+			=> ReportDiagnostic(context, descriptor, nodes.Select(node => node.GetLocation()), messageArgs);
+
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="locations">An optional primary location of the diagnostic. If null, <see cref="Location"/> will return <see cref="Location.None"/>.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic(this SyntaxNodeAnalysisContext context, DiagnosticDescriptor descriptor, IEnumerable<Location> locations, params object[] messageArgs)
+        {
+			var location = locations.FirstOrDefault() ?? Location.None;
+            context.ReportDiagnostic(Diagnostic.Create(descriptor, location, locations.Skip(1), messageArgs));
+        }
+
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="locations">An optional primary location of the diagnostic. If null, <see cref="Location"/> will return <see cref="Location.None"/>.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic(this SyntaxNodeAnalysisContext context, DiagnosticDescriptor descriptor, ImmutableArray<Location> locations, params object[] messageArgs)
+        {
+            context.ReportDiagnostic(Diagnostic.Create(descriptor, locations[0], locations.Skip(1), messageArgs));
+        }    }
 }

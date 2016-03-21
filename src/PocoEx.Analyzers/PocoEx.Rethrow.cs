@@ -57,7 +57,7 @@ namespace PocoEx
                 }
                 else if (Identifier.IsSameIdentifier(node.Expression))
                 {   // catch(Expression ex) { throw ex; }
-                    Context.ReportDiagnostic(Diagnostic.Create(Rules.PocoEx00001, node.GetLocation(), Identifier.Text));
+                    Context.ReportDiagnostic(Rules.PocoEx00001, node, Identifier.Text);
                 }
                 else if (node.Expression.IsKind(SyntaxKind.ObjectCreationExpression))
                 {
@@ -69,7 +69,7 @@ namespace PocoEx
                             return;
                         }
                     }
-                    Context.ReportDiagnostic(Diagnostic.Create(Rules.PocoEx00002, @new.GetLocation(), @new.Type, Identifier.Text));
+                    Context.ReportDiagnostic(Rules.PocoEx00002, @new, @new.Type, Identifier.Text);
                 }
             }
 
