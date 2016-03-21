@@ -180,4 +180,13 @@
   <data name="PocoEx00105Title" xml:space="preserve">
     <value>'ReferenceEquals(parameter, this)' is not invoked.</value>
   </data>
+  <data name="PocoEx00106Description" xml:space="preserve">
+    <value>All public instance fields or properties of the parameter should be checked.</value>
+  </data>
+  <data name="PocoEx00106MessageFormat" xml:space="preserve">
+    <value>'Equals({0})' should check '{1}'.</value>
+  </data>
+  <data name="PocoEx00106Title" xml:space="preserve">
+    <value>Check all public instance fields or properties of the parameter.</value>
+  </data>
 </root>

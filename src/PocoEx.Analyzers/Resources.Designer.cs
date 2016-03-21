@@ -249,5 +249,32 @@ namespace PocoEx {
                 return ResourceManager.GetString("PocoEx00105Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   All public instance fields or properties of the parameter should be checked. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00106Description {
+            get {
+                return ResourceManager.GetString("PocoEx00106Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   &apos;Equals({0})&apos; should check &apos;{1}&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00106MessageFormat {
+            get {
+                return ResourceManager.GetString("PocoEx00106MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Check all public instance fields or properties of the parameter. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00106Title {
+            get {
+                return ResourceManager.GetString("PocoEx00106Title", resourceCulture);
+            }
+        }
     }
 }

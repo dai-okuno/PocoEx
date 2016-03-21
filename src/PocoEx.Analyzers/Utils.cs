@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PocoEx
@@ -15,19 +16,20 @@ namespace PocoEx
     internal static partial class Utils
     {
         public static readonly Task CompletedTask = Task.Run(() => { });
-        public static Task<ClassDeclarationSyntax[]> GetClassDeclarationSyntaxAsync(this INamedTypeSymbol symbol)
-            => GetDeclarationSyntaxAsync<ClassDeclarationSyntax>(symbol);
 
-        private static Task<TSyntax[]> GetDeclarationSyntaxAsync<TSyntax>(this ISymbol symbol)
+        public static Task<IEnumerable<ClassDeclarationSyntax>> GetClassDeclarationSyntaxAsync(this INamedTypeSymbol symbol, CancellationToken cancellationToken = default(CancellationToken))
+            => GetDeclarationSyntaxAsync<ClassDeclarationSyntax>(symbol, cancellationToken);
+
+        private static Task<IEnumerable<TSyntax>> GetDeclarationSyntaxAsync<TSyntax>(this ISymbol symbol, CancellationToken cancellationToken = default(CancellationToken))
             where TSyntax : SyntaxNode
         {
             var declarations = symbol.DeclaringSyntaxReferences;
             var syntax = new Task<TSyntax>[declarations.Length];
             for (int i = 0; i < declarations.Length; i++)
             {
-                syntax[i] = declarations[i].GetSyntaxAsync().ContinueWith(t => (TSyntax)t.Result);
+                syntax[i] = declarations[i].GetSyntaxAsync(cancellationToken).ContinueWith(t => t.IsCompleted ? (TSyntax)t.Result : default(TSyntax));
             }
-            return Task.WhenAll(syntax);
+            return Task.WhenAll(syntax).ContinueWith(t => t.Result.Where(node => node != default(TSyntax)));
         }
 
         public static StringBuilder Join(this StringBuilder builder, string separator, IEnumerable<string> values)
@@ -42,6 +44,15 @@ namespace PocoEx
                 }
             }
             return builder;
+        }
+
+        public static bool IsAncestorOf(this ITypeSymbol type, ITypeSymbol other)
+        {
+            while ((type = type.BaseType) != null)
+            {
+                if (type.Equals(other)) return true;
+            }
+            return false;
         }
 
         public static bool IsParameterAndNull(ParameterSyntax parameter, ExpressionSyntax x, ExpressionSyntax y)
@@ -132,6 +143,7 @@ namespace PocoEx
             builder.Append(parameter.Type);
             return builder;
         }
+
     }
 
 }

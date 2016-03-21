@@ -28,6 +28,9 @@ namespace PocoEx
         /// <summary>'ReferenceEquals({0}, this)' should be invoked to check the parameter is same as the current object.</summary>
         public static readonly DiagnosticDescriptor PocoEx00105 = Usage(nameof(PocoEx00105));
 
+        /// <summary>'Equals({0})' should check '{0}.{1}'.</summary>
+        public static readonly DiagnosticDescriptor PocoEx00106 = Usage(nameof(PocoEx00106));
+
         /// <summary>Create a <see cref="DiagnosticDescriptor"/> belongs 'Design' category.</summary>
         /// <param name="id"></param>
         /// <param name="defaultSeverity">Default severity of the diagnostic. Default is <see cref="DiagnosticSeverity.Warning"/></param>

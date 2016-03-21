@@ -7,7 +7,10 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PocoEx
@@ -24,8 +27,8 @@ namespace PocoEx
 
         /// <summary>Gets the declaration syntaxes of <see cref="<#= entry.Symbol #>"/>.</summary>
         /// <param name="symbol">The symbol to get declarations.</param>
-        public static Task<<#= entry.Syntax #>[]> GetDeclarationSyntaxAsync(this <#= entry.Symbol #> symbol)
-            => GetDeclarationSyntaxAsync<<#= entry.Syntax #>>(symbol);
+        public static Task<IEnumerable<<#= entry.Syntax #>>> GetDeclarationSyntaxAsync(this <#= entry.Symbol #> symbol, CancellationToken cancellationToken = default(CancellationToken))
+            => GetDeclarationSyntaxAsync<<#= entry.Syntax #>>(symbol, cancellationToken);
 <#	} #>
 <#	foreach (var declaration in new [] {
 		"TypeDeclarationSyntax",
@@ -37,43 +40,32 @@ namespace PocoEx
         /// <summary>Gets the location of <see cref="<#= declaration #>.Identifier"/>.</summary>
         /// <param name="nodes">Nodes to get the location of the identifier.</param>
         /// <returns>The locations of the identifier.</returns>
-        public static Location[] GetIdentifierLocations(this <#= declaration #>[] nodes)
-        {
-            var result = new Location[nodes.Length];
-            for (int i = 0; i < nodes.Length; i++)
-            {
-                result[i] = nodes[i].Identifier.GetLocation();
-            }
-            return result;
-        }
+        public static IEnumerable<Location> GetIdentifierLocations(this IEnumerable<<#= declaration #>> nodes)
+			=> nodes.Select(node => node.Identifier.GetLocation());
 <#	} #>
 <#	foreach (var context in new [] {
 		"SymbolAnalysisContext",
 		"CodeBlockAnalysisContext",
 	}) { #>
 
-        public static void ReportDiagnostic<TSyntax>(this <#= context #> context, DiagnosticDescriptor descriptor, TSyntax[] nodes, params object[] messageArgs)
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="nodes">Syntax nodes related with the diagnostic.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic<TSyntax>(this <#= context #> context, DiagnosticDescriptor descriptor, IEnumerable<TSyntax> nodes, params object[] messageArgs)
             where TSyntax : SyntaxNode
+			=> ReportDiagnostic(context, descriptor, nodes.Select(node => node.GetLocation()), messageArgs);
+
+        /// <summary>Reports a <see cref="Diagnostic"/> related with a descriptor.</summary>
+        /// <param name="context">Context to report a diagnostic.</param>
+        /// <param name="descriptor">A <see cref="DiagnosticDescriptor"/> describing the diagnostic.</param>
+        /// <param name="locations">An optional primary location of the diagnostic. If null, <see cref="Location"/> will return <see cref="Location.None"/>.</param>
+        /// <param name="messageArgs">Arguments to the message of the diagnostic</param>
+        public static void ReportDiagnostic(this <#= context #> context, DiagnosticDescriptor descriptor, IEnumerable<Location> locations, params object[] messageArgs)
         {
-            if (nodes.Length == 1)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, nodes[0].GetLocation(), messageArgs));
-            }
-            else if (1 < nodes.Length)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, nodes[0].GetLocation(), nodes.Skip(1).Select(node => node.GetLocation()), messageArgs));
-            }
-        }
-        public static void ReportDiagnostic(this <#= context #> context, DiagnosticDescriptor descriptor, Location[] locations, params object[] messageArgs)
-        {
-            if (locations.Length == 1)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, locations[0], messageArgs));
-            }
-            else if (1 < locations.Length)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(descriptor, locations[0], locations.Skip(1), messageArgs));
-            }
+			var location = locations.FirstOrDefault() ?? Location.None;
+            context.ReportDiagnostic(Diagnostic.Create(descriptor, location, locations.Skip(1), messageArgs));
         }
 <#	} #>
     }
