@@ -2,15 +2,16 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using PocoEx.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using PocoEx.Linq;
 
-namespace PocoEx
+namespace PocoEx.CodeAnalysis.Equality
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public partial class EqualityAnalyzer
@@ -105,7 +106,8 @@ namespace PocoEx
                         return;
                     }
                 }
-                context.ReportDiagnostic(Rules.PocoEx00101, namedType.Locations);
+                context.ReportDiagnostic(
+                    Rules.PocoEx00101.ToDiagnostic(namedType.Locations));
                 return;
             }
         }
@@ -120,7 +122,9 @@ namespace PocoEx
                 }
             }
             // IEquatable<namedType> is not implemented.
-            context.ReportDiagnostic(Rules.PocoEx00102, namedType.Locations, namedType.ToString());
+            context.ReportDiagnostic(
+                Rules.PocoEx00102.ToDiagnostic(namedType.Locations,
+                namedType.ToString()));
         }
 
         class EqualsObjectAnalyzer
@@ -148,7 +152,9 @@ namespace PocoEx
                 var uninvoked = Format(Uninvoked);
                 if (uninvoked != string.Empty)
                 {
-                    context.ReportDiagnostic(Rules.PocoEx00103, context.OwningSymbol.Locations, uninvoked);
+                    context.ReportDiagnostic(
+                        Rules.PocoEx00103.ToDiagnostic(context.OwningSymbol.Locations,
+                        uninvoked));
                 }
             }
 
@@ -212,7 +218,7 @@ namespace PocoEx
             protected INamedTypeSymbol SuppressMessageAttributeSymbol { get; private set; }
 
             protected IMethodSymbol Target { get; private set; }
-            
+
             private IEnumerable<ISymbol> Untouched;
 
             public void Analyze(CodeBlockAnalysisContext context)
@@ -257,10 +263,9 @@ namespace PocoEx
                 {
                     if (SuppressedMemberNames.Contains(untouched.Name)) continue;
                     context.ReportDiagnostic(
-                        Rules.PocoEx00106,
-                        untouched.Locations.AddRange(Target.Locations),
+                        Rules.PocoEx00106.ToDiagnostic(untouched.Locations.AddRange(Target.Locations),
                         Target.Parameters[0].Type,
-                        untouched.Name);
+                        untouched.Name));
                 }
             }
 
@@ -327,16 +332,14 @@ namespace PocoEx
                 if (!ParameterNullCheckFound)
                 {
                     context.ReportDiagnostic(
-                        Rules.PocoEx00104,
-                        Target.Locations,
-                        Target.Parameters[0].Name);
+                        Rules.PocoEx00104.ToDiagnostic(Target.Locations,
+                        Target.Parameters[0].Name));
                 }
                 if (!ParameterThisCheckFound)
                 {
                     context.ReportDiagnostic(
-                        Rules.PocoEx00105,
-                        Target.Locations,
-                        Target.Parameters[0].Name);
+                        Rules.PocoEx00105.ToDiagnostic(Target.Locations,
+                        Target.Parameters[0].Name));
                 }
             }
             protected override void Analyzing(CodeBlockAnalysisContext context)

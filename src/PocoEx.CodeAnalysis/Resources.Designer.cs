@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PocoEx {
+namespace PocoEx.CodeAnalysis {
     using System;
     using System.Reflection;
     
@@ -40,7 +40,7 @@ namespace PocoEx {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PocoEx.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PocoEx.CodeAnalysis.Resources", typeof(Resources).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,15 +62,6 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   Use &apos;throw;&apos;. &apos;throw ex;&apos; resets the stacktrace. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string PocoEx00001Description {
-            get {
-                return ResourceManager.GetString("PocoEx00001Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Use &apos;throw;&apos; to rethrow &apos;{0}&apos;. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00001MessageFormat {
@@ -80,20 +71,11 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   Throws the catching exception explicitly. に類似しているローカライズされた文字列を検索します。
+        ///   The stacktrace is reset. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00001Title {
             get {
                 return ResourceManager.GetString("PocoEx00001Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Rethrow the wrapper exception with the cause. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string PocoEx00002Description {
-            get {
-                return ResourceManager.GetString("PocoEx00002Description", resourceCulture);
             }
         }
         
@@ -116,15 +98,6 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   &apos;Equals(T)&apos; is declared, but &apos;Equals(object)&apos; is not overridden. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string PocoEx00101Description {
-            get {
-                return ResourceManager.GetString("PocoEx00101Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   &apos;Equals(object)&apos; should be overridden. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00101MessageFormat {
@@ -139,15 +112,6 @@ namespace PocoEx {
         internal static string PocoEx00101Title {
             get {
                 return ResourceManager.GetString("PocoEx00101Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   A structure type should implement &apos;IEquatable&lt;T&gt;&apos;. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string PocoEx00102Description {
-            get {
-                return ResourceManager.GetString("PocoEx00102Description", resourceCulture);
             }
         }
         
@@ -170,15 +134,6 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   &apos;Equals(object)&apos; should invoke all other &apos;Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string PocoEx00103Description {
-            get {
-                return ResourceManager.GetString("PocoEx00103Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   &apos;Equals(object)&apos; should invoke {0}. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00103MessageFormat {
@@ -188,7 +143,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   &apos;Equals(object)&apos; don&apos;t invoke some &apos;Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;Equals(object)&apos; don&apos;t invoke any of &apos;Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00103Title {
             get {
@@ -197,16 +152,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   A reference type object should be null-checked. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string PocoEx00104Description {
-            get {
-                return ResourceManager.GetString("PocoEx00104Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   &apos;ReferenceEquals({0}, null)&apos; should be invoked to null-check. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;ReferenceEquals({0}, null)&apos; should be invoked to check for null reference. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00104MessageFormat {
             get {
@@ -215,7 +161,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   The parameter is a reference type object, but is not null-checked. に類似しているローカライズされた文字列を検索します。
+        ///   The parameter is a reference type object, but is not checked for null reference. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00104Title {
             get {
@@ -224,16 +170,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   Invoke &apos;ReferenceEquals(object, object)&apos; to check the parameter is same as the current object. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string PocoEx00105Description {
-            get {
-                return ResourceManager.GetString("PocoEx00105Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   &apos;ReferenceEquals({0}, this)&apos; should be invoked to check the parameter is same as the current object. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;ReferenceEquals({0}, this)&apos; should be invoked to check for reference equality. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00105MessageFormat {
             get {
@@ -242,7 +179,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   &apos;ReferenceEquals(parameter, this)&apos; is not invoked. に類似しているローカライズされた文字列を検索します。
+        ///   The parameter is a reference type object, but is not checked for reference equality. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00105Title {
             get {
@@ -251,16 +188,7 @@ namespace PocoEx {
         }
         
         /// <summary>
-        ///   All public instance fields or properties of the parameter should be checked. に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string PocoEx00106Description {
-            get {
-                return ResourceManager.GetString("PocoEx00106Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   &apos;Equals({0})&apos; should check &apos;{1}&apos;. に類似しているローカライズされた文字列を検索します。
+        ///   &apos;Equals({0})&apos; should check for the equality of &apos;{1}&apos;. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00106MessageFormat {
             get {

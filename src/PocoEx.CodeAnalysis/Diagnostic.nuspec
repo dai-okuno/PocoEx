@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>PocoEx.Analyzers</id>
+    <id>PocoEx.CodeAnalysis</id>
     <version>1.0.0.0</version>
-    <title>PocoEx.Analyzers</title>
+    <title>PocoEx.CodeAnalysis</title>
     <authors>dai_o</authors>
     <owners>dai_o</owners>
     <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
     <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
     <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>PocoEx.Analyzers</description>
+    <description>PocoEx.CodeAnalysis</description>
     <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
     <copyright>Copyright</copyright>
-    <tags>PocoEx.Analyzers, analyzers</tags>
+    <tags>PocoEx.CodeAnalysis, analyzers</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="" />
     </frameworkAssemblies>

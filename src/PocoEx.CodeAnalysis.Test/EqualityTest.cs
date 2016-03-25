@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PocoEx.CodeAnalysis.Equality;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestHelper;
 
-namespace PocoEx.Analyzers.Test
+namespace PocoEx.CodeAnalysis.Test
 {
     [TestClass]
     public class EqualityTest : CodeFixVerifier
@@ -568,5 +569,6 @@ namespace PocoEx
         {
             return new EqualityAnalyzer();
         }
+
     }
 }

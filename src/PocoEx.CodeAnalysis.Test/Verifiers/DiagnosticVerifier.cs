@@ -32,6 +32,7 @@ namespace TestHelper
         #endregion
 
         #region Verifier wrappers
+
         /// <summary>
         /// Called to test a C# DiagnosticAnalyzer when applied on the single inputted string as a source
         /// Note: input a DiagnosticResult for each Diagnostic expected

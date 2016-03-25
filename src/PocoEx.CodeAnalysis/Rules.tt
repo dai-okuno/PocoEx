@@ -1,0 +1,49 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".generated.cs" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Xml.Linq" #>
+using Microsoft.CodeAnalysis;
+
+namespace PocoEx.CodeAnalysis
+{
+    partial class Rules
+    {
+<#	XDocument resources = XDocument.Load(this.Host.ResolvePath("Resources.resx"));
+	var idSuffix = "MessageFormat";
+	foreach (var mf in resources.Root.Elements("data")
+		.Where(data => data.Attribute("name").Value.EndsWith(idSuffix))) {
+		var id = mf.Attribute("name").Value.Remove(mf.Attribute("name").Value.Length - idSuffix.Length); #>
+
+        /// <summary><#= mf.Element("value").Value #></summary>
+        public static readonly DiagnosticDescriptor <#= id #>;
+<#	} #>
+<#	foreach (var category in new [] {
+		"Usage",
+		"Design",
+	}) { #>
+
+        /// <summary>Create a <see cref="DiagnosticDescriptor"/> belongs "<#= category #>" category.</summary>
+        /// <param name="id"></param>
+        /// <param name="defaultSeverity">Default severity of the diagnostic. Default is <see cref="DiagnosticSeverity.Warning"/></param>
+        /// <param name="isEnabledByDefault">True if the diagnostic is enabled by default. Default is true.</param>
+        /// <param name="helpLinkUri">An optional hyperlink that provides a more detailed description regarding the diagnostic.</param>
+        /// <param name="customTags">Optional custom tags for the diagnostic.</param>
+        /// <returns>a <see cref="DiagnosticDescriptor"/> belongs "<#= category #>" category.</returns>
+        private static DiagnosticDescriptor <#= category #>(
+            string id,
+            DiagnosticSeverity defaultSeverity = DiagnosticSeverity.Warning,
+            bool isEnabledByDefault = true,
+            string helpLinkUri = null, params string[] customTags)
+
+        {
+            return CreateDescriptor(id, nameof(<#= category #>), defaultSeverity, isEnabledByDefault, helpLinkUri, customTags);
+        }
+<#	} #>
+    }
+}

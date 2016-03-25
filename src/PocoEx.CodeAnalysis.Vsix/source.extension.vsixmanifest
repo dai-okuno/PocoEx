@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="PocoEx.Analyzers..c85c0f35-9f79-40b3-9226-d8524172e224" Version="1.0" Language="en-US" Publisher="dai_o"/>
-    <DisplayName>PocoEx.Analyzers</DisplayName>
+    <Identity Id="PocoEx.CodeAnalysis..58053cd8-15bf-4251-bec7-46edabe5ca90" Version="1.0" Language="en-US" Publisher="dai_o"/>
+    <DisplayName>PocoEx.CodeAnalysis</DisplayName>
     <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
   </Metadata>
   <Installation>
@@ -12,7 +12,7 @@
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="PocoEx.Analyzers" Path="|PocoEx.Analyzers|"/>
-    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="PocoEx.Analyzers" Path="|PocoEx.Analyzers|"/>
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="PocoEx.CodeAnalysis" Path="|PocoEx.CodeAnalysis|"/>
+    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="PocoEx.CodeAnalysis" Path="|PocoEx.CodeAnalysis|"/>
   </Assets>
 </PackageManifest>

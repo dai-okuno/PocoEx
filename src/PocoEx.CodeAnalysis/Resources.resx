@@ -117,17 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PocoEx00001Description" xml:space="preserve">
-    <value>Use 'throw;'. 'throw ex;' resets the stacktrace.</value>
-  </data>
   <data name="PocoEx00001MessageFormat" xml:space="preserve">
     <value>Use 'throw;' to rethrow '{0}'.</value>
   </data>
   <data name="PocoEx00001Title" xml:space="preserve">
-    <value>Throws the catching exception explicitly.</value>
-  </data>
-  <data name="PocoEx00002Description" xml:space="preserve">
-    <value>Rethrow the wrapper exception with the cause.</value>
+    <value>The stacktrace is reset.</value>
   </data>
   <data name="PocoEx00002MessageFormat" xml:space="preserve">
     <value>Initialize '{0}' with the inner exception('{1}').</value>
@@ -135,17 +129,11 @@
   <data name="PocoEx00002Title" xml:space="preserve">
     <value>The wrapper exception ignores the cause.</value>
   </data>
-  <data name="PocoEx00101Description" xml:space="preserve">
-    <value>'Equals(T)' is declared, but 'Equals(object)' is not overridden.</value>
-  </data>
   <data name="PocoEx00101MessageFormat" xml:space="preserve">
     <value>'Equals(object)' should be overridden.</value>
   </data>
   <data name="PocoEx00101Title" xml:space="preserve">
     <value>'Equals(object)' is not overridden.</value>
-  </data>
-  <data name="PocoEx00102Description" xml:space="preserve">
-    <value>A structure type should implement 'IEquatable&lt;T&gt;'.</value>
   </data>
   <data name="PocoEx00102MessageFormat" xml:space="preserve">
     <value>'{0}' should implement 'IEquatable&lt;{0}&gt;'.</value>
@@ -153,38 +141,26 @@
   <data name="PocoEx00102Title" xml:space="preserve">
     <value>A structure type doesn't implement 'IEquatable&lt;T&gt;'.</value>
   </data>
-  <data name="PocoEx00103Description" xml:space="preserve">
-    <value>'Equals(object)' should invoke all other 'Equals(T)'.</value>
-  </data>
   <data name="PocoEx00103MessageFormat" xml:space="preserve">
     <value>'Equals(object)' should invoke {0}.</value>
   </data>
   <data name="PocoEx00103Title" xml:space="preserve">
-    <value>'Equals(object)' don't invoke some 'Equals(T)'.</value>
-  </data>
-  <data name="PocoEx00104Description" xml:space="preserve">
-    <value>A reference type object should be null-checked.</value>
+    <value>'Equals(object)' don't invoke any of 'Equals(T)'.</value>
   </data>
   <data name="PocoEx00104MessageFormat" xml:space="preserve">
-    <value>'ReferenceEquals({0}, null)' should be invoked to null-check.</value>
+    <value>'ReferenceEquals({0}, null)' should be invoked to check for null reference.</value>
   </data>
   <data name="PocoEx00104Title" xml:space="preserve">
-    <value>The parameter is a reference type object, but is not null-checked.</value>
-  </data>
-  <data name="PocoEx00105Description" xml:space="preserve">
-    <value>Invoke 'ReferenceEquals(object, object)' to check the parameter is same as the current object.</value>
+    <value>The parameter is a reference type object, but is not checked for null reference.</value>
   </data>
   <data name="PocoEx00105MessageFormat" xml:space="preserve">
-    <value>'ReferenceEquals({0}, this)' should be invoked to check the parameter is same as the current object.</value>
+    <value>'ReferenceEquals({0}, this)' should be invoked to check for reference equality.</value>
   </data>
   <data name="PocoEx00105Title" xml:space="preserve">
-    <value>'ReferenceEquals(parameter, this)' is not invoked.</value>
-  </data>
-  <data name="PocoEx00106Description" xml:space="preserve">
-    <value>All public instance fields or properties of the parameter should be checked.</value>
+    <value>The parameter is a reference type object, but is not checked for reference equality.</value>
   </data>
   <data name="PocoEx00106MessageFormat" xml:space="preserve">
-    <value>'Equals({0})' should check '{1}'.</value>
+    <value>'Equals({0})' should check for the equality of '{1}'.</value>
   </data>
   <data name="PocoEx00106Title" xml:space="preserve">
     <value>Check all public instance fields or properties of the parameter.</value>

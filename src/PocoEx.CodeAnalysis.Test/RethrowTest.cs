@@ -2,10 +2,11 @@
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PocoEx.CodeAnalysis.Rethrow;
 using System;
 using TestHelper;
 
-namespace PocoEx.Analyzers.Test
+namespace PocoEx.CodeAnalysis.Test
 {
     [TestClass]
     public class RethrowTest : CodeFixVerifier

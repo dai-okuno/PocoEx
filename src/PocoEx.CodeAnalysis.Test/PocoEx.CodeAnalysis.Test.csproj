@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A5C97DEC-53F1-49E4-A7F6-C8DC7C81C2CE}</ProjectGuid>
+    <ProjectGuid>{0C0A21C8-BE5F-4502-9303-5E3796037866}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PocoEx.Analyzers.Test</RootNamespace>
-    <AssemblyName>PocoEx.Analyzers.Test</AssemblyName>
+    <RootNamespace>PocoEx.CodeAnalysis.Test</RootNamespace>
+    <AssemblyName>PocoEx.CodeAnalysis.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -103,31 +103,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EqualityTest.cs" />
+    <Compile Include="RethrowTest.cs" />
     <Compile Include="SourceFile.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
     <Compile Include="Verifiers\DiagnosticVerifier.cs" />
     <Compile Include="Helpers\CodeFixVerifier.Helper.cs" />
     <Compile Include="Helpers\DiagnosticResult.cs" />
     <Compile Include="Helpers\DiagnosticVerifier.Helper.cs" />
-    <Compile Include="RethrowTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PocoEx.CodeAnalysis\PocoEx.CodeAnalysis.csproj">
+      <Project>{7BA002FF-2AA1-4E8C-9131-7B92AF3DEEFC}</Project>
+      <Name>PocoEx.CodeAnalysis</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PocoEx.Analyzers\PocoEx.Analyzers.csproj">
-      <Project>{70FE937D-1794-4C07-B7F0-55BBEFAB566B}</Project>
-      <Name>PocoEx.Analyzers</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

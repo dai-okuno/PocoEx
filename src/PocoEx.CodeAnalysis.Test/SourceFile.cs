@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace PocoEx.Analyzers.Test
+namespace PocoEx.CodeAnalysis.Test
 {
     class SourceFile
     {
