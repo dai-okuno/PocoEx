@@ -19,12 +19,15 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PocoEx.Linq.Shared", "PocoE
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PocoEx.Shared", "PocoEx.Shared\PocoEx.Shared.shproj", "{6A8E0F86-329E-479D-BFE4-94DFA8C2AFC8}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PocoEx.Collections", "PocoEx.Collections\PocoEx.Collections.shproj", "{3342C3F1-4D8D-455D-86EB-457C5EB1858C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PocoEx.Shared\PocoEx.Shared.projitems*{6a8e0f86-329e-479d-bfe4-94dfa8c2afc8}*SharedItemsImports = 13
 		PocoEx.Shared\PocoEx.Shared.projitems*{7ba002ff-2aa1-4e8c-9131-7b92af3deefc}*SharedItemsImports = 4
 		PocoEx.Linq.Shared\PocoEx.Linq.Shared.projitems*{7ba002ff-2aa1-4e8c-9131-7b92af3deefc}*SharedItemsImports = 4
 		PocoEx.Linq.Shared\PocoEx.Linq.Shared.projitems*{72494d50-d2fd-4ff0-81f4-95ee2b630009}*SharedItemsImports = 13
+		PocoEx.Collections\PocoEx.Collections.projitems*{3342c3f1-4d8d-455d-86eb-457c5eb1858c}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

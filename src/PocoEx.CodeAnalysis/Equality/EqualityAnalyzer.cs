@@ -2,14 +2,12 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using PocoEx.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using PocoEx.Linq;
 
 namespace PocoEx.CodeAnalysis.Equality
 {
@@ -214,8 +212,9 @@ namespace PocoEx.CodeAnalysis.Equality
 
             protected SemanticModel SemanticModel { get; private set; }
 
-            protected ISet<string> SuppressedMemberNames { get; private set; }
-            protected INamedTypeSymbol SuppressMessageAttributeSymbol { get; private set; }
+            protected ImmutableArray<string> SuppressedMemberNames { get; private set; }
+
+            protected INamedTypeSymbol IgnoreAttributeSymbol { get; private set; }
 
             protected IMethodSymbol Target { get; private set; }
 
@@ -273,18 +272,26 @@ namespace PocoEx.CodeAnalysis.Equality
             {
                 Target = (IMethodSymbol)context.OwningSymbol;
                 SemanticModel = context.SemanticModel;
-                SuppressMessageAttributeSymbol = SemanticModel.Compilation.GetTypeByMetadataName(typeof(SuppressMessageAttribute).FullName);
-                SuppressedMemberNames = new HashSet<string>(
-                    Target.GetAttributes()
-                    .Where(attr => SuppressMessageAttributeSymbol.Equals(attr.AttributeClass)
-                        && 2 <= attr.ConstructorArguments.Length
-                        && attr.ConstructorArguments[0].Type.SpecialType == SpecialType.System_String
-                        && Rules.PocoEx00106.Category.Equals(attr.ConstructorArguments[0].Value)
-                        && attr.ConstructorArguments[1].Type.SpecialType == SpecialType.System_String
-                        && Rules.PocoEx00106.Id.Equals(attr.ConstructorArguments[1].Value)
-                        && attr.NamedArguments.Any(arg => arg.Key == nameof(SuppressMessageAttribute.MessageId)
-                            && arg.Value.Type.SpecialType == SpecialType.System_String))
-                    .Select(attr => (string)attr.NamedArguments.First(arg => arg.Key == nameof(SuppressMessageAttribute.MessageId)).Value.Value));
+                IgnoreAttributeSymbol = SemanticModel.Compilation.GetTypeByMetadataName("PocoEx.CodeAnalysis.EqualityIgnoreAttribute");
+                var ignore = Target.GetAttributes().FirstOrDefault(attr => IgnoreAttributeSymbol.Equals(attr.AttributeClass));
+                if (ignore == null
+                    || ignore.ConstructorArguments.Length < 1
+                    || ignore.ConstructorArguments[0].Values.Length < 1)
+                {
+                    SuppressedMemberNames = ImmutableArray<string>.Empty;
+                }
+                else
+                {
+                    var builder = ImmutableArray.CreateBuilder<string>(ignore.ConstructorArguments[0].Values.Length);
+                    foreach (var constant in ignore.ConstructorArguments[0].Values)
+                    {
+                        if (constant.Type.SpecialType != SpecialType.System_String) continue;
+                        var name = (string)constant.Value;
+                        if (string.IsNullOrEmpty(name)) continue;
+                        builder.Add(name);
+                    }
+                    SuppressedMemberNames = builder.MoveToImmutable();
+                }
 
                 Untouched = Target.Parameters[0].Type.GetMembers()
                     .Where(IsEqualityElement);

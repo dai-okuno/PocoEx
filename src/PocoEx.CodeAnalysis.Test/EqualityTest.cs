@@ -64,7 +64,7 @@ namespace PocoEx
         #region PocoEx00102
 
         [TestMethod]
-        public void PocoEx00102_Fix_NonGeneric()
+        public void PocoEx00102_Fix_non_generic()
         {
             int line = 5;
             int column = 12;
@@ -91,7 +91,7 @@ namespace PocoEx
         }
 
         [TestMethod]
-        public void PocoEx00102_Fix_Generic()
+        public void PocoEx00102_Fix_generic()
         {
             int line = 5;
             int column = 12;
@@ -119,7 +119,7 @@ namespace PocoEx
         }
 
         [TestMethod]
-        public void PocoEx00102_Analyze_Implements_IEquatableSelf()
+        public void PocoEx00102_Analyze_implements_IEquatableSelf()
         {
             var test = @"
 using System;
@@ -144,7 +144,7 @@ namespace PocoEx
         #region PocoEx00103
 
         [TestMethod]
-        public void PocoEx00103_Analyze_NoEquals()
+        public void PocoEx00103_Analyze_no_Equals()
         {
             var test = @"
 using System;
@@ -189,7 +189,7 @@ namespace PocoEx
         }
 
         [TestMethod]
-        public void PocoEx00103_Fix_ReferenceType()
+        public void PocoEx00103_Fix_reference_type()
         {
             int line = 9;
             int column = 30;
@@ -230,7 +230,7 @@ namespace PocoEx
         }
 
         [TestMethod]
-        public void PocoEx00103_Fix_ValueType()
+        public void PocoEx00103_Fix_value_type()
         {
             int line = 9;
             int column = 30;
@@ -271,7 +271,7 @@ namespace PocoEx
         }
 
         [TestMethod]
-        public void PocoEx00103_Fix_Multi()
+        public void PocoEx00103_Fix_2_Equals()
         {
             int line = 9;
             int column = 30;
@@ -401,7 +401,7 @@ namespace PocoEx
         #region PocoEx00106
 
         [TestMethod]
-        public void PocoEx00106_Fix_1_Property()
+        public void PocoEx00106_Fix_self_1_public_property()
         {
             int line = 9;
             int column = 21;
@@ -440,7 +440,7 @@ namespace PocoEx
         }
 
         [TestMethod]
-        public void PocoEx00106_Fix_2_Properties()
+        public void PocoEx00106_Fix_self_2_public_properties()
         {
             int line = 11;
             int column = 21;
@@ -491,7 +491,7 @@ namespace PocoEx
         }
 
         [TestMethod]
-        public void PocoEx00106_Fix_1_of_2_Properties()
+        public void PocoEx00106_Fix_self_1_of_2_properties()
         {
             int line = 11;
             int column = 21;
@@ -533,7 +533,7 @@ namespace PocoEx
         }
 
         [TestMethod]
-        public void PocoEx00106_Analyze_Suppress_1_of_2_Properties()
+        public void PocoEx00106_Analyze_self_suppress_1_of_2_properties()
         {
             var test = @"
 using System;
@@ -546,7 +546,7 @@ namespace PocoEx
 
         public int Value { get; private set; }
 
-        [SuppressMessage(""Usage"", ""PocoEx00106"", MessageId = ""Value"")]
+        [PocoEx.CodeAnalysis.EqualityIgnore(nameof(Value))]
         public bool Equals(Class1 other)
             => ReferenceEquals(other, this)
                 || (!ReferenceEquals(other, null)
