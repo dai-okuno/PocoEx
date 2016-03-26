@@ -432,7 +432,6 @@ namespace PocoEx
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                 new[] {
-                    new DiagnosticResultLocation("Test0.cs", 7, 20),
                     new DiagnosticResultLocation("Test0.cs", line, column),
                 }
             };
@@ -473,7 +472,6 @@ namespace PocoEx
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                 new[] {
-                    new DiagnosticResultLocation("Test0.cs", 7, 20),
                     new DiagnosticResultLocation("Test0.cs", line, column),
                 }
             };
@@ -484,7 +482,6 @@ namespace PocoEx
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                 new[] {
-                    new DiagnosticResultLocation("Test0.cs", 9, 20),
                     new DiagnosticResultLocation("Test0.cs", line, column),
                 }
             }; VerifyCSharpDiagnostic(test, expected1, expected2);
@@ -525,7 +522,6 @@ namespace PocoEx
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                 new[] {
-                    new DiagnosticResultLocation("Test0.cs", 7, 20),
                     new DiagnosticResultLocation("Test0.cs", line, column),
                 }
             };
@@ -563,6 +559,46 @@ namespace PocoEx
             VerifyCSharpDiagnostic(test);
         }
 
+        [TestMethod]
+        public void PocoEx00106_Fix_backing_field()
+        {
+            int line = 12;
+            int column = 21;
+            var test = @"
+using System;
+namespace PocoEx
+{
+    class Class1: IEquatable<Class1>
+    {
+        private int _Value;
+
+        public int Value
+            => _Value;
+
+        public bool Equals(Class1 other)
+            => ReferenceEquals(other, this)
+                || (!ReferenceEquals(other, null)
+                );
+
+        public override bool Equals(object obj)
+            => Equals(obj as Class1);
+
+        public override int GetHashCode()
+            => Value;
+    }
+";
+            var expected = new DiagnosticResult
+            {
+                Id = Rules.PocoEx00106.Id,
+                Message = string.Format(Resources.PocoEx00106MessageFormat, "PocoEx.Class1", "_Value"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                new[] {
+                    new DiagnosticResultLocation("Test0.cs", line, column),
+                }
+            };
+            VerifyCSharpDiagnostic(test, expected);
+        }
         #endregion
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

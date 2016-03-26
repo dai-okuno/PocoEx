@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using PocoEx.Collections;
 using PocoEx.Linq;
 using System;
 using System.Collections.Generic;
@@ -200,7 +201,7 @@ namespace PocoEx.CodeAnalysis.Equality
                 {
                     case SymbolKind.Field:
                         var field = (IFieldSymbol)member;
-                        return !field.IsConst;
+                        return !field.IsConst && !field.IsImplicitlyDeclared;
                     case SymbolKind.Property:
                         var property = (IPropertySymbol)member;
                         return property.GetMethod != null
@@ -209,8 +210,7 @@ namespace PocoEx.CodeAnalysis.Equality
                         return false;
                 }
             };
-
-            protected SemanticModel SemanticModel { get; private set; }
+            protected CodeBlockAnalysisContext Context { get; private set; }
 
             protected ImmutableArray<string> SuppressedMemberNames { get; private set; }
 
@@ -229,7 +229,7 @@ namespace PocoEx.CodeAnalysis.Equality
 
             public override void VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
             {
-                var symbol = SemanticModel.GetSymbolInfo(node);
+                var symbol = Context.SemanticModel.GetSymbolInfo(node);
                 if (symbol.CandidateReason == CandidateReason.None
                     && !symbol.Symbol.IsStatic
                     && symbol.Symbol.DeclaredAccessibility == Accessibility.Public
@@ -262,7 +262,7 @@ namespace PocoEx.CodeAnalysis.Equality
                 {
                     if (SuppressedMemberNames.Contains(untouched.Name)) continue;
                     context.ReportDiagnostic(
-                        Rules.PocoEx00106.ToDiagnostic(untouched.Locations.AddRange(Target.Locations),
+                        Rules.PocoEx00106.ToDiagnostic(Target.Locations,
                         Target.Parameters[0].Type,
                         untouched.Name));
                 }
@@ -271,8 +271,8 @@ namespace PocoEx.CodeAnalysis.Equality
             protected virtual void Analyzing(CodeBlockAnalysisContext context)
             {
                 Target = (IMethodSymbol)context.OwningSymbol;
-                SemanticModel = context.SemanticModel;
-                IgnoreAttributeSymbol = SemanticModel.Compilation.GetTypeByMetadataName("PocoEx.CodeAnalysis.EqualityIgnoreAttribute");
+                Context = context;
+                IgnoreAttributeSymbol = Context.SemanticModel.Compilation.GetTypeByMetadataName("PocoEx.CodeAnalysis.EqualityIgnoreAttribute");
                 var ignore = Target.GetAttributes().FirstOrDefault(attr => IgnoreAttributeSymbol.Equals(attr.AttributeClass));
                 if (ignore == null
                     || ignore.ConstructorArguments.Length < 1
@@ -292,9 +292,181 @@ namespace PocoEx.CodeAnalysis.Equality
                     }
                     SuppressedMemberNames = builder.MoveToImmutable();
                 }
+                var parameterType = Target.Parameters[0].Type;
+                if (IsSupportedType(parameterType))
+                {
+                    Untouched = parameterType.GetMembers()
+                        .Where(
+                            Target.ContainingType.Equals(parameterType) ? IsEqualityElementOfSelf
+                            : Target.ContainingType.IsImplements(parameterType) ? IsEqualityElementOfImplemented
+                            : Target.ContainingType.IsSubTypeOf(parameterType) ? IsEqualityElementOfAncestor
+                            : IsEqualityElement);
+                }
+                else
+                {
+                    Untouched = Empty.Enumerable<ISymbol>();
+                }
+            }
 
-                Untouched = Target.Parameters[0].Type.GetMembers()
-                    .Where(IsEqualityElement);
+            private bool IsEqualityElementOfAncestor(ISymbol member)
+            {
+                if (member.IsStatic) return false;
+                switch (member.Kind)
+                {
+                    case SymbolKind.Field:
+                        var field = (IFieldSymbol)member;
+                        if (field.IsConst || field.IsImplicitlyDeclared)
+                        {   // const or auto-backing-field
+                            return false;
+                        }
+                        else
+                        {   // declared
+                            switch (field.DeclaredAccessibility)
+                            {
+                                case Accessibility.Public:
+                                case Accessibility.Protected:
+                                case Accessibility.ProtectedOrInternal:
+                                    return true;
+                                case Accessibility.NotApplicable:
+                                case Accessibility.Private:
+                                    return false;
+                                case Accessibility.ProtectedAndInternal:
+                                case Accessibility.Internal:
+                                    return IsInternal(field);
+                                default:
+                                    throw Utils.UnexpectedEnum(field.DeclaredAccessibility);
+                            }
+                        }
+                    case SymbolKind.Property:
+                        var property = (IPropertySymbol)member;
+                        if (property.GetMethod == null || !property.GetMethod.IsImplicitlyDeclared)
+                        {   // write-only or not auto-property
+                            return false;
+                        }
+                        else
+                        {   // declared
+                            switch (property.GetMethod.DeclaredAccessibility)
+                            {
+                                case Accessibility.Public:
+                                case Accessibility.Protected:
+                                case Accessibility.ProtectedOrInternal:
+                                    return true;
+                                case Accessibility.NotApplicable:
+                                case Accessibility.Private:
+                                    return false;
+                                case Accessibility.ProtectedAndInternal:
+                                case Accessibility.Internal:
+                                    return IsInternal(property);
+                                default:
+                                    throw Utils.UnexpectedEnum(property.DeclaredAccessibility);
+                            }
+                        }
+                    default:
+                        return false;
+                }
+            }
+
+            private bool IsEqualityElementOfImplemented(ISymbol member)
+                => member.Kind == SymbolKind.Property;
+
+            private bool IsEqualityElementOfSelf(ISymbol member)
+            {
+                if (member.IsStatic) return false;
+                switch (member.Kind)
+                {
+                    case SymbolKind.Field:
+                        var field = (IFieldSymbol)member;
+                        if (field.IsConst || field.IsImplicitlyDeclared)
+                        {   // const or auto-backing-field
+                            return false;
+                        }
+                        else if (field.IsDefinition)
+                        {   // declared
+                            return true;
+                        }
+                        else
+                        {   // derived
+                            switch (field.DeclaredAccessibility)
+                            {
+                                case Accessibility.Public:
+                                case Accessibility.Protected:
+                                case Accessibility.ProtectedOrInternal:
+                                    return true;
+                                case Accessibility.NotApplicable:
+                                case Accessibility.Private:
+                                    return false;
+                                case Accessibility.ProtectedAndInternal:
+                                case Accessibility.Internal:
+                                    return IsInternal(field);
+                                default:
+                                    throw Utils.UnexpectedEnum(field.DeclaredAccessibility);
+                            }
+                        }
+                    case SymbolKind.Property:
+                        var property = (IPropertySymbol)member;
+                        if (property.IsWriteOnly) return false;
+                        // has getter
+                        var getter = property.GetMethod.DeclaringSyntaxReferences[0].GetSyntax(Context.CancellationToken) as AccessorDeclarationSyntax;
+                        if (getter == null || getter.Body != null) return false;
+                        // auto-property
+                        if (property.IsDefinition) return true;
+                        // derived
+                        switch (property.GetMethod.DeclaredAccessibility)
+                        {
+                            case Accessibility.Public:
+                            case Accessibility.Protected:
+                            case Accessibility.ProtectedOrInternal:
+                                return true;
+                            case Accessibility.NotApplicable:
+                            case Accessibility.Private:
+                                return false;
+                            case Accessibility.ProtectedAndInternal:
+                            case Accessibility.Internal:
+                                return IsInternal(property);
+                            default:
+                                throw Utils.UnexpectedEnum(property.DeclaredAccessibility);
+                        }
+                    default:
+                        return false;
+                }
+            }
+
+            private bool IsInternal(ISymbol symbol)
+                => Context.SemanticModel.Compilation.Assembly.Equals(symbol.ContainingAssembly);
+
+            private bool IsSupportedType(ITypeSymbol parameterType)
+            {
+                switch (parameterType.SpecialType)
+                {
+                    case SpecialType.System_String:
+                    case SpecialType.System_Boolean:
+                    case SpecialType.System_Byte:
+                    case SpecialType.System_Int16:
+                    case SpecialType.System_Int32:
+                    case SpecialType.System_Int64:
+                    case SpecialType.System_SByte:
+                    case SpecialType.System_UInt16:
+                    case SpecialType.System_UInt32:
+                    case SpecialType.System_UInt64:
+                    case SpecialType.System_Decimal:
+                    case SpecialType.System_Double:
+                    case SpecialType.System_Single:
+                    case SpecialType.System_Char:
+                    case SpecialType.System_IntPtr:
+                    case SpecialType.System_UIntPtr:
+                        return false;
+                    default:
+                        switch (parameterType.TypeKind)
+                        {
+                            case TypeKind.Class:
+                            case TypeKind.Interface:
+                            case TypeKind.Struct:
+                            case TypeKind.Unknown:
+                                return true;
+                            default:
+                                return false;
+                        }
+                }
             }
 
         }
@@ -317,7 +489,7 @@ namespace PocoEx.CodeAnalysis.Equality
             {
                 if (!ParameterThisCheckFound || !ParameterNullCheckFound)
                 {
-                    var symbol = SemanticModel.GetSymbolInfo(node);
+                    var symbol = Context.SemanticModel.GetSymbolInfo(node);
                     if (symbol.CandidateReason == CandidateReason.None
                         && Object_ReferenceEquals.Equals(symbol.Symbol))
                     {
@@ -353,14 +525,14 @@ namespace PocoEx.CodeAnalysis.Equality
             {
                 base.Analyzing(context);
 
-                Object_ReferenceEquals = (IMethodSymbol)SemanticModel.Compilation.GetTypeByMetadataName(typeof(object).FullName)
+                Object_ReferenceEquals = (IMethodSymbol)Context.SemanticModel.Compilation.GetTypeByMetadataName(typeof(object).FullName)
                     .GetMembers(nameof(ReferenceEquals))
                     .First();
             }
 
             private bool IsParameter(SyntaxNode node)
             {
-                var symbol = SemanticModel.GetSymbolInfo(node);
+                var symbol = Context.SemanticModel.GetSymbolInfo(node);
                 return symbol.CandidateReason == CandidateReason.None
                     && Target.Parameters[0].Equals(symbol.Symbol);
             }

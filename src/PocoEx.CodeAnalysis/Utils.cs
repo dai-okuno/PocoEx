@@ -45,6 +45,26 @@ namespace PocoEx.CodeAnalysis
             return builder;
         }
 
+        public static bool IsImplements(this ITypeSymbol type, ITypeSymbol @interface)
+        {
+            if (@interface.TypeKind != TypeKind.Interface) return false;
+            foreach (var t in type.AllInterfaces)
+            {
+                if (t.Equals(@interface)) return true;
+            }
+            return false;
+        }
+
+        public static bool IsSubTypeOf(this ITypeSymbol type, ITypeSymbol other)
+        {
+            var baseType = type;
+            while ((baseType = baseType.BaseType) != null)
+            {
+                if (baseType.Equals(other)) return true;
+            }
+            return false;
+        }
+
         public static Diagnostic ToDiagnostic(this DiagnosticDescriptor descriptor, Location location, params object[] messageArgs)
             => Diagnostic.Create(descriptor, location, messageArgs);
 
@@ -59,6 +79,12 @@ namespace PocoEx.CodeAnalysis
             {
                 return Diagnostic.Create(descriptor, location, locations.Skip(1), messageArgs);
             }
+        }
+
+
+        public static Exception UnexpectedEnum<T>(T value)
+        {
+            return new Exception(string.Format("{0}.{1} is unexpected. ", typeof(T), value));
         }
 
         private static StringBuilder AppendSignature(this StringBuilder builder, IParameterSymbol parameter)

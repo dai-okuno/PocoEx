@@ -142,6 +142,7 @@
   </ItemGroup>
   <Import Project="..\PocoEx.Linq.Shared\PocoEx.Linq.Shared.projitems" Label="Shared" />
   <Import Project="..\PocoEx.Shared\PocoEx.Shared.projitems" Label="Shared" />
+  <Import Project="..\PocoEx.Collections\PocoEx.Collections.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\v4.6\Microsoft.Portable.CSharp.targets" />
   <Target Name="AfterBuild">
     <GetAssemblyIdentity AssemblyFiles="$(OutDir)\$(AssemblyName).dll">
