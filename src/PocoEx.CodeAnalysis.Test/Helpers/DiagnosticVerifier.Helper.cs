@@ -25,6 +25,9 @@ namespace TestHelper
         internal static string VisualBasicDefaultExt = "vb";
         internal static string TestProjectName = "TestProject";
 
+        /// <summary>ContentFiles に含まれているファイルなど、追加で読み込まれるドキュメントの数。</summary>
+        private static int AddtionalDocumentCount = 0;
+
         #region  Get Diagnostics
 
         /// <summary>
@@ -114,7 +117,7 @@ namespace TestHelper
             var project = CreateProject(sources, language);
             var documents = project.Documents.ToArray();
 
-            if (sources.Length != documents.Length)
+            if (sources.Length + AddtionalDocumentCount != documents.Length)
             {
                 throw new SystemException("Amount of sources did not match amount of Documents created");
             }
@@ -162,6 +165,8 @@ namespace TestHelper
                 solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
                 count++;
             }
+            solution = solution.AddDocument(DocumentId.CreateNewId(projectId), "Attributes.cs", SourceText.From(PocoEx.CodeAnalysis.Test.ContentFiles.Attributes, PocoEx.CodeAnalysis.Test.ContentFiles.Attributes.Length));
+            AddtionalDocumentCount = 1;
             return solution.GetProject(projectId);
         }
         #endregion

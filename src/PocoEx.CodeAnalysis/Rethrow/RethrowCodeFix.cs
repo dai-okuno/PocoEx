@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace PocoEx.CodeAnalysis.Rethrow
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PocoEx00001CodeFix)), Shared]
-    public class PocoEx00001CodeFix
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RethrowCodeFix)), Shared]
+    public class RethrowCodeFix
         : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; }

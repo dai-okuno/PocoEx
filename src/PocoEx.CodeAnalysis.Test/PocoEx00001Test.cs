@@ -9,7 +9,7 @@ using TestHelper;
 namespace PocoEx.CodeAnalysis.Test
 {
     [TestClass]
-    public class RethrowTest : CodeFixVerifier
+    public class PocoEx00001Test : CodeFixVerifier
     {
 
         //No diagnostics expected to show up
@@ -23,7 +23,7 @@ namespace PocoEx.CodeAnalysis.Test
 
         //Diagnostic and CodeFix both triggered and checked for
         [TestMethod]
-        public void Fix_PocoEx00001()
+        public void Fix()
         {
             int line = 5;
             int column = 5;
@@ -56,7 +56,7 @@ catch (Exception ex)
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new PocoEx00001CodeFix();
+            return new RethrowCodeFix();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

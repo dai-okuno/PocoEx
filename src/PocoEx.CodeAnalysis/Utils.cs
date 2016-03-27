@@ -12,6 +12,10 @@ namespace PocoEx.CodeAnalysis
     {
         public static readonly Task Completed = Task.FromResult(0);
 
+        private static volatile string[] Indents = Enumerable.Range(0, 8)
+            .Select(l => l == 0 ? string.Empty : CreateIndent(l))
+            .ToArray();
+
         /// <summary>Append the signature of the specified method symbol.</summary>
         /// <param name="builder"><see cref="StringBuilder"/> to append.</param>
         /// <param name="method"><see cref="IMethodSymbol"/> to append.</param>
@@ -43,6 +47,25 @@ namespace PocoEx.CodeAnalysis
             }
             builder.Append(')');
             return builder;
+        }
+
+        /// <summary>Gets indent string with specified level.</summary>
+        /// <param name="level">The level of indent.</param>
+        /// <returns></returns>
+        public static string GetIndent(int level)
+        {
+            var indents = Indents;
+            if (indents.Length <= level)
+            {
+                var newIndents = new string[level];
+                indents.CopyTo(newIndents, 0);
+                for (int l = indents.Length; l < newIndents.Length; l++)
+                {
+                    newIndents[l] = CreateIndent(l);
+                }
+                Indents = newIndents;
+            }
+            return indents[level];
         }
 
         public static bool IsImplements(this ITypeSymbol type, ITypeSymbol @interface)
@@ -105,5 +128,9 @@ namespace PocoEx.CodeAnalysis
             builder.Append(parameter.Type);
             return builder;
         }
+
+        private static string CreateIndent(int level)
+           => new string(' ', Microsoft.CodeAnalysis.Formatting.FormattingOptions.IndentationSize.DefaultValue * level);
+
     }
 }

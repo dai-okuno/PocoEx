@@ -98,6 +98,15 @@ namespace PocoEx.CodeAnalysis {
         }
         
         /// <summary>
+        ///   Override &apos;Equals(object)&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00101CodeFixTitle {
+            get {
+                return ResourceManager.GetString("PocoEx00101CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   &apos;Equals(object)&apos; should be overridden. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PocoEx00101MessageFormat {
@@ -130,6 +139,15 @@ namespace PocoEx.CodeAnalysis {
         internal static string PocoEx00102Title {
             get {
                 return ResourceManager.GetString("PocoEx00102Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Invoke all of &apos;Equals(T)&apos;. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PocoEx00103CodeFixTitle {
+            get {
+                return ResourceManager.GetString("PocoEx00103CodeFixTitle", resourceCulture);
             }
         }
         

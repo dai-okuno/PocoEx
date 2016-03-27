@@ -43,12 +43,7 @@ namespace PocoEx.CodeAnalysis.Equality
         private static void AnalyzeCodeBlock(CodeBlockAnalysisContext context)
         {
             var method = context.OwningSymbol as IMethodSymbol;
-            if (method == null
-                || method.DeclaredAccessibility != Accessibility.Public
-                || method.IsStatic
-                || method.ReturnType.SpecialType != SpecialType.System_Boolean
-                || method.Parameters.Length != 1
-                || method.Name != "Equals") return;
+            if (!IsEqualsT(method)) return;
 
             switch (method.Parameters[0].Type.SpecialType)
             {
@@ -74,6 +69,17 @@ namespace PocoEx.CodeAnalysis.Equality
                 default:
                     break;
             }
+        }
+
+        internal static bool IsEqualsT(IMethodSymbol method)
+        {
+            return method != null
+                && method.DeclaredAccessibility == Accessibility.Public
+                && !method.IsStatic
+                && method.ReturnType.SpecialType == SpecialType.System_Boolean
+                && method.Parameters.Length == 1
+                && method.Parameters[0].Type.TypeKind != TypeKind.Error
+                && method.Name == nameof(Equals);
         }
 
         private static void AnalyzeNamedType(SymbolAnalysisContext context)
@@ -214,8 +220,6 @@ namespace PocoEx.CodeAnalysis.Equality
 
             protected ImmutableArray<string> SuppressedMemberNames { get; private set; }
 
-            protected INamedTypeSymbol IgnoreAttributeSymbol { get; private set; }
-
             protected IMethodSymbol Target { get; private set; }
 
             private IEnumerable<ISymbol> Untouched;
@@ -272,8 +276,8 @@ namespace PocoEx.CodeAnalysis.Equality
             {
                 Target = (IMethodSymbol)context.OwningSymbol;
                 Context = context;
-                IgnoreAttributeSymbol = Context.SemanticModel.Compilation.GetTypeByMetadataName("PocoEx.CodeAnalysis.EqualityIgnoreAttribute");
-                var ignore = Target.GetAttributes().FirstOrDefault(attr => IgnoreAttributeSymbol.Equals(attr.AttributeClass));
+                var ignoreAttribute = context.SemanticModel.Compilation.GetTypeByMetadataName("PocoEx.CodeAnalysis.Equality.EqualityIgnoreAttribute");
+                var ignore = Target.GetAttributes().FirstOrDefault(a => ignoreAttribute?.Equals(a.AttributeClass) ?? false);
                 if (ignore == null
                     || ignore.ConstructorArguments.Length < 1
                     || ignore.ConstructorArguments[0].Values.Length < 1)

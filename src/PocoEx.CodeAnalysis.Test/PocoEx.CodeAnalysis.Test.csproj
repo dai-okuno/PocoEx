@@ -102,8 +102,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EqualityTest.cs" />
-    <Compile Include="RethrowTest.cs" />
+    <Compile Include="ContentFiles.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ContentFiles.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PocoEx00101Test.cs" />
+    <Compile Include="PocoEx00102Test.cs" />
+    <Compile Include="PocoEx00103Test.cs" />
+    <Compile Include="PocoEx00104Test.cs" />
+    <Compile Include="PocoEx00105Test.cs" />
+    <Compile Include="PocoEx00106Test.cs" />
+    <Compile Include="PocoEx00001Test.cs" />
     <Compile Include="SourceFile.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
     <Compile Include="Verifiers\DiagnosticVerifier.cs" />
@@ -129,6 +139,14 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ContentFiles.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContentFiles.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
